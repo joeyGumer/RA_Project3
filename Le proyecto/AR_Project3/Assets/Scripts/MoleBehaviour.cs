@@ -27,6 +27,7 @@ public class MoleBehaviour : MonoBehaviour {
     myDelegate currentState;
 
     public float down_y;
+    public float up_y;
     Vector3 up_position;
     Vector3 down_position;
     float max_distance;
@@ -43,15 +44,14 @@ public class MoleBehaviour : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        up_position = transform.position;
-        down_position = down_y * transform.up;
         max_distance = (up_position - down_position).magnitude;
 
         //Creating random generator
         string seed = Time.time.ToString();
         r_generator = new System.Random(seed.GetHashCode());
 
-        transform.position = down_position;
+        distance = down_y;
+        UpdatePosition(); 
 
         currentState = GoUp;
 	}
@@ -59,7 +59,10 @@ public class MoleBehaviour : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+        
         currentState();
+        UpdatePosition();
+
     }
 
     void OnMouseDown()
@@ -77,15 +80,12 @@ void GoUp()
             else
                 sp = special_chance;
 
-            Vector3 movement = transform.up * sp * Time.deltaTime;
-            transform.Translate(movement);
 
+            distance += speed * Time.deltaTime;
 
-            distance = (transform.position - down_position).magnitude;
-
-            if (distance >= max_distance)
+            if (distance >= up_y)
             {
-                transform.position = up_position;
+                distance = up_y;
                 up = true;
 
                 mole_timer = 0.0f;
@@ -122,15 +122,11 @@ void GoUp()
             sp = special_chance;
 
 
-        Vector3 movement = transform.up * -sp * Time.deltaTime;
-        transform.Translate(movement);
+        distance -= speed * Time.deltaTime;
 
-
-        distance = (up_position - transform.position).magnitude;
-
-        if (distance >= max_distance)
+        if (distance <= down_y)
         {
-            transform.position = down_position;
+            distance = down_y;
             ret = true;
         }
 
@@ -157,7 +153,7 @@ void GoUp()
         {
             //Wich rotation will it have
             float angle = r_generator.Next(0, 360);
-            transform.Rotate(transform.up, angle);
+            transform.Rotate(0.0f, angle, 0.0f, Space.Self);
 
             //Set if it's special or not
             int sp_random = r_generator.Next(1, 100);
@@ -201,5 +197,10 @@ void GoUp()
             to_smash = false;
             currentState = GoDown;
         }
+    }
+
+    void UpdatePosition()
+    {
+        transform.position = transform.parent.position + transform.parent.up * distance;
     }
 }
