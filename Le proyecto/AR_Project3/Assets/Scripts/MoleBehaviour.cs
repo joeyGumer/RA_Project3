@@ -33,7 +33,6 @@ public class MoleBehaviour : MonoBehaviour {
     float max_distance;
     
 
-    System.Random r_generator;
     public float mole_timer = 0.0f;
     public float time_to_appear = 0.0f;
     public bool up = false;
@@ -46,14 +45,11 @@ public class MoleBehaviour : MonoBehaviour {
 	void Start () {
         max_distance = (up_position - down_position).magnitude;
 
-        //Creating random generator
-        string seed = Time.time.ToString();
-        r_generator = new System.Random(seed.GetHashCode());
 
         distance = down_y;
         UpdatePosition(); 
 
-        currentState = GoUp;
+        currentState = GoDown;
 	}
 	
 	// Update is called once per frame
@@ -152,11 +148,11 @@ void GoUp()
         else
         {
             //Wich rotation will it have
-            float angle = r_generator.Next(0, 360);
+            float angle = GetRandom(0, 360);
             transform.Rotate(0.0f, angle, 0.0f, Space.Self);
 
             //Set if it's special or not
-            int sp_random = r_generator.Next(1, 100);
+            int sp_random = GetRandom(1, 100);
 
             if(sp_random > special_chance)
             {
@@ -179,7 +175,7 @@ void GoUp()
     //Utils
     int GetRandom(int min, int max)
     {
-        return r_generator.Next(min, max);
+        return Random.Range(min, max);
     }
 
     void SetBodyMaterial(Material mat)
