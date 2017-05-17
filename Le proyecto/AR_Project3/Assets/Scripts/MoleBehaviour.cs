@@ -9,16 +9,17 @@ public class MoleBehaviour : MonoBehaviour {
     public int inactive_min_time = 1;
     public int inactive_max_time = 10;
     public int active_time = 3;
+    public int special_chance = 10;
 
     //Materials
-    public Material idle;
-    public Material smashed;
-    public Material special;
+    public Material m_idle;
+    public Material m_smashed;
+    public Material m_special;
     //
 
     //Attached GO
-    public GameObject body;
-    public GameObject nose;
+    public GameObject go_body;
+    public GameObject go_nose;
 
     delegate void myDelegate();
     myDelegate currentState;
@@ -33,6 +34,8 @@ public class MoleBehaviour : MonoBehaviour {
     public float mole_timer = 0.0f;
     public float time_to_appear = 0.0f;
     public bool up = false;
+    public bool to_smash = false;
+    public bool special = false;
 
     public float distance;
 
@@ -49,22 +52,20 @@ public class MoleBehaviour : MonoBehaviour {
         transform.position = down_position;
 
         currentState = GoUp;
-
-        //StartCoroutine(GoUp());
 	}
 	
 	// Update is called once per frame
 	void Update ()
     {
         currentState();
-        if (Input.GetKey(KeyCode.A))
-        {
-            body.GetComponent<Renderer>().material = smashed;
-        }
-
     }
 
-    void GoUp()
+    void OnMouseDown()
+    {
+        OnSmash();
+    }
+
+void GoUp()
     {
         if (!up)
         {
@@ -123,14 +124,16 @@ public class MoleBehaviour : MonoBehaviour {
         {
             mole_timer = 0.0f;
             time_to_appear = GetRandom(inactive_min_time, inactive_max_time);
-            
+            to_smash = false;
+
+
             currentState = SetNextState;
         }
         
     }
 
     void SetNextState()
-    {
+    { 
 
         if (mole_timer <= time_to_appear)
         {
@@ -142,14 +145,45 @@ public class MoleBehaviour : MonoBehaviour {
             float angle = r_generator.Next(0, 360);
             transform.Rotate(transform.up, angle);
 
+            //Set if it's special or not
+            int sp_random = r_generator.Next(1, 100);
+
+            if(sp_random > special_chance)
+            {
+                special = false;
+                SetBodyMaterial(m_idle);
+            }
+            else
+            {
+                special = false;
+                SetBodyMaterial(m_special);
+            }
+
             //Then go up
             up = false;
+            to_smash = true;
             currentState = GoUp;
         }
     }
 
+    //Utils
     int GetRandom(int min, int max)
     {
         return r_generator.Next(min, max);
+    }
+
+    void SetBodyMaterial(Material mat)
+    {
+        go_body.GetComponent<Renderer>().material = mat;
+    }
+
+    public void OnSmash()
+    {
+        if (to_smash)
+        {
+            SetBodyMaterial(m_smashed);
+            to_smash = false;
+            currentState = GoDown;
+        }
     }
 }
