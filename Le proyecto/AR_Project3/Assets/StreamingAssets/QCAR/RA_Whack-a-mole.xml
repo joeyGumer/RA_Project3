@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
+  <Tracking>
+    <ImageTarget name="NormalMole4" size="2.000000 2.641510" />
+    <ImageTarget name="NormalMole3" size="2.000000 2.641510" />
+    <ImageTarget name="NormalMole2" size="2.000000 2.641510" />
+    <ImageTarget name="SpecialMole3" size="2.000000 2.641510" />
+    <ImageTarget name="SpecialMole2" size="2.000000 2.641510" />
+    <ImageTarget name="SpecialMole1" size="2.000000 2.641510" />
+    <ImageTarget name="NormalMole6" size="2.000000 2.641510" />
+    <ImageTarget name="NormalMole5" size="2.000000 2.641510" />
+    <ImageTarget name="NormalMole1" size="2.000000 2.641510" />
+    <ImageTarget name="Ass" size="2.000000 2.712999" />
+  </Tracking>
+</QCARConfig>
