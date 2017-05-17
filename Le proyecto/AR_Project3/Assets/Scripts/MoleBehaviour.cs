@@ -6,6 +6,7 @@ public class MoleBehaviour : MonoBehaviour {
 
     public float up_time = 5.0f;
     public float speed = 1.0f;
+    public float special_speed = 3.0f;
     public int inactive_min_time = 1;
     public int inactive_max_time = 10;
     public int active_time = 3;
@@ -18,6 +19,7 @@ public class MoleBehaviour : MonoBehaviour {
     //
 
     //Attached GO
+    public GameObject go_gameSystem;
     public GameObject go_body;
     public GameObject go_nose;
 
@@ -69,7 +71,13 @@ void GoUp()
     {
         if (!up)
         {
-            Vector3 movement = transform.up * speed * Time.deltaTime;
+            float sp;
+            if (!special)
+                sp = speed;
+            else
+                sp = special_chance;
+
+            Vector3 movement = transform.up * sp * Time.deltaTime;
             transform.Translate(movement);
 
 
@@ -107,8 +115,14 @@ void GoUp()
     {
         bool ret = false;
 
+        float sp;
+        if (!special)
+            sp = speed;
+        else
+            sp = special_chance;
 
-        Vector3 movement = transform.up * -speed * Time.deltaTime;
+
+        Vector3 movement = transform.up * -sp * Time.deltaTime;
         transform.Translate(movement);
 
 
@@ -182,6 +196,8 @@ void GoUp()
         if (to_smash)
         {
             SetBodyMaterial(m_smashed);
+            go_gameSystem.GetComponent<GameSystem>().AddPoints(special);
+            go_gameSystem.GetComponent<GameSystem>().AddTime(special);
             to_smash = false;
             currentState = GoDown;
         }
