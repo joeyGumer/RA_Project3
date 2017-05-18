@@ -8,7 +8,6 @@ public class GameSystem : MonoBehaviour {
     public int points = 0;
     public int normal_points = 10;
     public int special_points = 50;
-    int points2 = 0;
 
     public float game_time = 60;
     public float special_extra_time = 5;
@@ -62,9 +61,7 @@ public class GameSystem : MonoBehaviour {
         if(game_time <= 0)
         {
             in_game_menu.SetActive(false);
-
-            points2 = points;
-            points2_text.text = points2.ToString();
+            points2_text.text = points.ToString();
             end_menu.SetActive(true);
         }
     }

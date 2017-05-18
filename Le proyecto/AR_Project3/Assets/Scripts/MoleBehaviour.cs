@@ -188,8 +188,11 @@ void GoUp()
         if (to_smash)
         {
             SetBodyMaterial(m_smashed);
-            go_gameSystem.GetComponent<GameSystem>().AddPoints(special);
-            go_gameSystem.GetComponent<GameSystem>().AddTime(special);
+            if(go_gameSystem.GetComponent<GameSystem>().game_time >= 0)
+            {
+                go_gameSystem.GetComponent<GameSystem>().AddPoints(special);
+                go_gameSystem.GetComponent<GameSystem>().AddTime(special);
+            }
             to_smash = false;
             currentState = GoDown;
         }
