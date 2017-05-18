@@ -188,8 +188,10 @@ void GoUp()
         if (to_smash)
         {
             SetBodyMaterial(m_smashed);
+
             if(go_gameSystem.GetComponent<GameSystem>().game_time >= 0)
             {
+                GetComponent<AudioSource>().Play();
                 go_gameSystem.GetComponent<GameSystem>().AddPoints(special);
                 go_gameSystem.GetComponent<GameSystem>().AddTime(special);
             }
